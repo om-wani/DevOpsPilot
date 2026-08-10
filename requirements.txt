@@ -1,0 +1,8 @@
+openai
+python-dotenv
+requests
+chromadb
+tiktoken
+fastapi
+uvicorn
+pytest

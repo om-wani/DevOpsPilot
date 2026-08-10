@@ -1,0 +1,25 @@
+# Secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Generated data
+data/
+chroma/
+
+# Stray output
+cmd-out.txt
+
+# AI agents
+*claude*
+*agents*
+
+# Node / extension build
+node_modules/
+extension/dist/
+extension/dist-vsix/
+*.vsix
