@@ -1,0 +1,163 @@
+{
+  "work_items": [
+    {
+      "type": "Bug",
+      "title": "Auth token expires mid-session on long RAG queries",
+      "description": "Users report getting logged out while a long retrieval query is still running. The access token has a 15 minute lifetime, but a query against the full wiki index sometimes takes longer than that when the vector store is under load. We need a token refresh check before starting a long-running query, not just at request entry.",
+      "state": "Active",
+      "comments": [
+        "Confirmed this happens most on the wiki-wide search endpoint, not the single-ticket lookup.",
+        "Likely fix: refresh token if under 2 minutes remaining before kicking off retrieval."
+      ]
+    },
+    {
+      "type": "Task",
+      "title": "Add SSE streaming to chat completion endpoint",
+      "description": "Current chat endpoint returns the full response in one payload, so the UI shows a spinner for 4 to 6 seconds on longer answers. Switch the FastAPI endpoint to stream tokens back using server-sent events, matching the pattern already used in the Bramha project.",
+      "state": "Active",
+      "comments": [
+        "Frontend team needs an ETA on this since the chat widget redesign depends on it."
+      ]
+    },
+    {
+      "type": "Task",
+      "title": "Embed wiki pages into vector store on save",
+      "description": "Right now wiki content only gets embedded through a manual batch script. Add a webhook so that when a wiki page is edited and saved, it gets re-embedded automatically within a few minutes.",
+      "state": "New",
+      "comments": []
+    },
+    {
+      "type": "Bug",
+      "title": "Duplicate work items returned in retrieval results",
+      "description": "When a work item has been edited multiple times, the retrieval step sometimes returns the same ticket twice with slightly different embedding scores. Likely caused by re-embedding on every edit without removing the old vector first.",
+      "state": "Active",
+      "comments": [
+        "Related to WI-5, since the webhook work will make this worse if we don't fix dedup first."
+      ]
+    },
+    {
+      "type": "Task",
+      "title": "Draft PR description generator using diff context",
+      "description": "Add a feature where a user can click Generate Description on an open pull request, and the model reads the diff and existing commit messages to draft a description. Should follow the team's existing PR template format.",
+      "state": "New",
+      "comments": []
+    },
+    {
+      "type": "Task",
+      "title": "Add cost logging table for AI requests",
+      "description": "Every call to the chat or embeddings model should log token counts, deployment name, and a rough dollar cost estimate into a Postgres table. This feeds the cost dashboard due later this sprint.",
+      "state": "Active",
+      "comments": [
+        "Use tiktoken for token counts before the call goes out, not just from the response usage field, so we can also track prompt-side cost separately."
+      ]
+    },
+    {
+      "type": "Bug",
+      "title": "Wiki page translation drops code blocks",
+      "description": "When translating a wiki page into another language, fenced code blocks are getting run through the translation model along with the surrounding text, which mangles variable names and comments inside the code. Code blocks should be excluded from the translation call and reinserted after.",
+      "state": "Active",
+      "comments": []
+    },
+    {
+      "type": "Task",
+      "title": "Set up Azure DevOps Extension SDK boilerplate",
+      "description": "Initialize the extension project using the Azure DevOps Extension SDK, configure the manifest for a work item form group contribution, and confirm it loads inside a test work item page.",
+      "state": "New",
+      "comments": [
+        "Reference the extension samples repo for the manifest structure, ours will need a similar contribution type."
+      ]
+    },
+    {
+      "type": "Task",
+      "title": "Build cost dashboard widget",
+      "description": "Small dashboard showing total AI spend for the current sprint, broken down by feature, chat, embeddings, translation. Pull data from the cost logging table.",
+      "state": "New",
+      "comments": []
+    },
+    {
+      "type": "Bug",
+      "title": "Retrieval context window overflow on large wiki pages",
+      "description": "One of the wiki pages is long enough that including its full content in the prompt pushes past the model's context limit when combined with three or four other retrieved chunks. Need to chunk long pages before embedding instead of storing them as a single vector.",
+      "state": "Active",
+      "comments": [
+        "This is probably the root cause of the empty answers users saw yesterday on architecture questions."
+      ]
+    },
+    {
+      "type": "Task",
+      "title": "Add PAT rotation reminder",
+      "description": "The personal access token used for the DevOps REST API calls expires in 90 days. Add a check that logs a warning to the console 7 days before expiry so this doesn't silently break the pipeline.",
+      "state": "New",
+      "comments": []
+    },
+    {
+      "type": "Task",
+      "title": "Write architecture wiki page for onboarding",
+      "description": "New team members keep asking how the RAG pipeline fits together. Write a wiki page covering the flow from DevOps REST API pull through embedding, storage, and retrieval, so onboarding doesn't need a live walkthrough every time.",
+      "state": "Resolved",
+      "comments": [
+        "Draft is up, linking it here for review before marking closed."
+      ]
+    },
+    {
+      "type": "Bug",
+      "title": "Chat widget loses scroll position on new token",
+      "description": "During streaming responses, the chat panel jumps to the top of the message every time a new token arrives instead of staying anchored to the bottom. Minor but noticeable on longer answers.",
+      "state": "Active",
+      "comments": []
+    },
+    {
+      "type": "Task",
+      "title": "Add rate limiting to chat endpoint",
+      "description": "No rate limiting currently exists on the chat endpoint, so a runaway frontend loop could rack up cost quickly. Add a simple per-user request cap, something like 20 requests per minute.",
+      "state": "New",
+      "comments": []
+    },
+    {
+      "type": "Task",
+      "title": "Document embeddings model choice in setup guide",
+      "description": "We switched from ada-002 to text-embedding-3-small after hitting a quota limit on ada-002 in our region. Document this decision and the dimension size in the setup wiki page so future contributors don't assume ada-002 by default.",
+      "state": "Resolved",
+      "comments": [
+        "Added a short section under Model Configuration in the setup guide."
+      ]
+    },
+    {
+      "type": "Bug",
+      "title": "Extension fails to load in Safari",
+      "description": "The work item widget renders correctly in Chrome and Edge but shows a blank panel in Safari. Likely a CSS or SDK compatibility issue specific to the iframe sandbox Safari uses for extensions.",
+      "state": "New",
+      "comments": []
+    },
+    {
+      "type": "Task",
+      "title": "Add unit tests for retrieval ranking",
+      "description": "The retrieval step that ranks and selects the top chunks before passing them to the model has no test coverage. Add tests covering tie-breaking, empty result sets, and chunk limit enforcement.",
+      "state": "Active",
+      "comments": []
+    },
+    {
+      "type": "Task",
+      "title": "Deploy backend to Azure Container Apps",
+      "description": "Move the FastAPI backend from local development to a proper deployment on Azure Container Apps, with environment variables managed through Azure secrets instead of a local .env file.",
+      "state": "New",
+      "comments": [
+        "Need to confirm which region keeps latency lowest against the Foundry resource."
+      ]
+    }
+  ],
+  "wiki_pages": [
+    {
+      "title": "Architecture Overview",
+      "content": "# Architecture Overview\n\nDevOps Pilot pulls work items, pull requests, and wiki pages from Azure DevOps through the REST API using a scoped personal access token. Content gets chunked and embedded using an Azure OpenAI embeddings model, then stored in a vector database.\n\nWhen a user asks a question inside the work item widget, the backend embeds the question, searches the vector store for the closest matching chunks, and passes those chunks as context to the chat model. The chat model generates an answer grounded in that context and streams it back to the widget using server-sent events, so the response appears token by token instead of all at once.\n\nThe extension itself is a small React application built with the Azure DevOps Extension SDK. It runs inside an iframe embedded in the work item form and talks to our FastAPI backend over HTTPS.\n\nCost tracking runs alongside every model call. Each request logs its token count and deployment name to a Postgres table, which feeds a small dashboard showing spend broken down by feature.\n\n## Known Limitations\n\nLong wiki pages currently get embedded as a single chunk, which can overflow the model's context window when combined with other retrieved results. Chunking is planned but not yet built.\n\nThe extension has not been tested in Safari and is known to fail there."
+    },
+    {
+      "title": "Setup Guide",
+      "content": "# Setup Guide\n\nThis guide covers getting the project running locally.\n\n## Prerequisites\n\nAn Azure account with a Microsoft Foundry resource. Two model deployments are required: a chat model and an embeddings model. This project currently uses GPT-4.1-mini for chat, since GPT-4o-mini has been deprecated, and text-embedding-3-small for embeddings, after the default text-embedding-ada-002 deployment hit a quota limit in our region. If you have quota available for ada-002, it will also work, the vector dimensions match.\n\nAn Azure DevOps organization and project, with a personal access token scoped to Work Items, Wiki, and Code, all set to read access at minimum, write access needed if you plan to run the seed script.\n\nPython 3.11 or later, and Node.js if you plan to work on the extension package.\n\n## Environment Variables\n\nCopy .env.example to .env and fill in your Azure OpenAI endpoint, key, and deployment names, along with your Azure DevOps organization, project, and personal access token.\n\nNote on the endpoint format: use the OpenAI-compatible endpoint ending in /openai/v1, not the Foundry project endpoint. The project endpoint is for the Foundry SDK and does not work with the standard OpenAI Python client used in this project.\n\n## Running the Seed Script\n\nThe seed script populates your test DevOps project with sample work items and wiki pages, useful for testing retrieval without needing real production data. Run it once against a fresh test project, not against a project with real content.\n\n## Model Configuration\n\nDeployment names are case sensitive and must match exactly what is shown in the Foundry portal. Double check these first if you get a deployment not found error."
+    },
+    {
+      "title": "API Conventions",
+      "content": "# API Conventions\n\nAll backend endpoints live under /api and return JSON. Streaming endpoints use server-sent events with a Content-Type of text/event-stream instead of application/json.\n\n## Error Format\n\nErrors return a consistent shape: a status code, an error field with a short machine-readable code, and a message field with a human-readable description. Avoid returning raw exception text to the client.\n\n## Authentication\n\nRequests from the extension include a bearer token issued by Azure DevOps OAuth. Requests made directly against the backend during local development can use a static development token set in the environment, this should never be enabled outside local development.\n\n## Rate Limits\n\nThe chat endpoint should enforce a per-user request cap to prevent runaway cost from a frontend bug or loop. This is tracked as an open task and not yet implemented.\n\n## Versioning\n\nBreaking changes to the request or response shape of any endpoint should bump the API version in the URL path, for example /api/v2/chat, rather than changing the existing endpoint in place."
+    }
+  ]
+}
