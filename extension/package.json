@@ -1,0 +1,33 @@
+{
+  "name": "devops-pilot-extension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "package": "npm run build && tfx extension create --manifest-globs vss-extension.json --output-path dist-vsix",
+    "package:dev": "npm run build && tfx extension create --manifest-globs vss-extension.json vss-extension.dev.json --output-path dist-vsix",
+    "test": "vitest run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "azure-devops-extension-sdk": "^5.0.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^3.2.7"
+  }
+}
