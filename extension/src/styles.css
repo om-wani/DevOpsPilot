@@ -1,0 +1,180 @@
+/* SDK.init({ applyTheme: true }) injects Azure DevOps theme variables, so the
+   panel follows the user's light or dark theme instead of fighting it. The
+   fallbacks keep it readable if the host ever stops sending them. */
+:root {
+  --pilot-bg: var(--background-color, #fff);
+  --pilot-text: var(--text-primary-color, rgba(0, 0, 0, 0.9));
+  --pilot-muted: var(--text-secondary-color, rgba(0, 0, 0, 0.55));
+  --pilot-accent: var(--communication-foreground, #0078d4);
+  --pilot-border: var(--palette-black-alpha-10, rgba(0, 0, 0, 0.1));
+  --pilot-surface: var(--palette-black-alpha-4, rgba(0, 0, 0, 0.04));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--pilot-bg);
+  color: var(--pilot-text);
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 240px;
+  padding: 4px;
+}
+
+/* Empty state */
+.empty {
+  padding: 20px 4px;
+}
+
+.empty-title {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.empty-body {
+  margin: 0 0 14px;
+  color: var(--pilot-muted);
+  max-width: 44ch;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  border: 1px solid var(--pilot-border);
+  background: transparent;
+  color: var(--pilot-accent);
+  border-radius: 14px;
+  padding: 5px 12px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.chip:hover {
+  background: var(--pilot-surface);
+}
+
+/* Conversation */
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.message.user .text {
+  font-weight: 600;
+}
+
+.message .text {
+  margin: 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.message .text.failed {
+  color: var(--pilot-muted);
+  font-style: italic;
+}
+
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.source {
+  font-size: 11px;
+  color: var(--pilot-muted);
+  border: 1px solid var(--pilot-border);
+  border-radius: 3px;
+  padding: 1px 6px;
+}
+
+/* Three dots while the first token is still in flight */
+.thinking {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px 0;
+}
+
+.thinking i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--pilot-muted);
+  animation: blink 1.2s infinite ease-in-out;
+}
+
+.thinking i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.thinking i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0.25; }
+  40% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thinking i {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* Composer */
+.composer {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.composer input {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  font: inherit;
+  color: var(--pilot-text);
+  background: var(--pilot-bg);
+  border: 1px solid var(--pilot-border);
+  border-radius: 2px;
+}
+
+.composer input:focus {
+  outline: 1px solid var(--pilot-accent);
+  border-color: var(--pilot-accent);
+}
+
+.composer button {
+  padding: 7px 16px;
+  font: inherit;
+  color: #fff;
+  background: var(--pilot-accent);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.composer button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
