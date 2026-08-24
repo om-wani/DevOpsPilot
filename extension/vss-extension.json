@@ -1,0 +1,29 @@
+{
+  "manifestVersion": 1,
+  "id": "devops-pilot",
+  "version": "0.1.0",
+  "name": "DevOps Pilot",
+  "publisher": "REPLACE_WITH_YOUR_PUBLISHER_ID",
+  "description": "Ask questions about a work item and get answers grounded in your project's tickets and wiki.",
+  "categories": ["Azure Boards"],
+  "targets": [{ "id": "Microsoft.VisualStudio.Services" }],
+  "icons": { "default": "images/logo.png" },
+  "scopes": ["vso.work"],
+  "contributions": [
+    {
+      "id": "work-item-panel",
+      "type": "ms.vss-work-web.work-item-form-group",
+      "description": "Chat panel inside the work item form.",
+      "targets": ["ms.vss-work-web.work-item-form"],
+      "properties": {
+        "name": "DevOps Pilot",
+        "uri": "dist/index.html",
+        "height": 420
+      }
+    }
+  ],
+  "files": [
+    { "path": "dist", "addressable": true },
+    { "path": "images", "addressable": true }
+  ]
+}

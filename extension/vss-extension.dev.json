@@ -1,0 +1,18 @@
+{
+  "id": "devops-pilot-dev",
+  "name": "DevOps Pilot (dev)",
+  "public": false,
+  "baseUri": "https://localhost:3000",
+  "contributions": [
+    {
+      "id": "work-item-panel",
+      "type": "ms.vss-work-web.work-item-form-group",
+      "targets": ["ms.vss-work-web.work-item-form"],
+      "properties": {
+        "name": "DevOps Pilot (dev)",
+        "uri": "index.html",
+        "height": 420
+      }
+    }
+  ]
+}
