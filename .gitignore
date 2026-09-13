@@ -23,3 +23,6 @@ node_modules/
 extension/dist/
 extension/dist-vsix/
 *.vsix
+
+
+*.DS_Store
